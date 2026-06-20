@@ -1,0 +1,36 @@
+# ── Backend Go ────────────────────────────────────────────────────────────────
+backend/bin/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+vendor/
+coverage.out
+coverage.html
+
+# ── Frontend Node ─────────────────────────────────────────────────────────────
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# ── Variables de entorno — NUNCA commitear credenciales reales ────────────────
+.env
+.env.local
+backend/.env
+!backend/.env.example
+
+# ── Docker volumes locales ────────────────────────────────────────────────────
+postgres_data/
+
+# ── IDEs ──────────────────────────────────────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# ── Sistema operativo ─────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db

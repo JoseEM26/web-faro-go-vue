@@ -1,0 +1,66 @@
+services:
+
+  # ─── Base de datos PostgreSQL ────────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: taskgo-postgres
+    environment:
+      POSTGRES_USER:     postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB:       proyecto_go
+    ports:
+      # Puerto externo 5433 para no colisionar con un PostgreSQL local (que usa 5432)
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - taskgo-net
+
+  # ─── Backend Go ──────────────────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: taskgo-backend
+    environment:
+      DB_HOST:     postgres
+      DB_PORT:     5432          # puerto INTERNO de la red Docker (no el 5433 externo)
+      DB_USER:     postgres
+      DB_PASSWORD: postgres
+      DB_NAME:     proyecto_go
+      DB_SSLMODE:  disable
+      SERVER_PORT: 8080
+      JWT_SECRET:  "taskgo-super-secreto-cambia-esto-en-produccion-32chars"
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - taskgo-net
+
+  # ─── Frontend Vue (nginx) ────────────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: taskgo-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - taskgo-net
+
+# ─── Volúmenes y red ──────────────────────────────────────────────────────────
+volumes:
+  postgres_data:
+
+networks:
+  taskgo-net:
+    driver: bridge

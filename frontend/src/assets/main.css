@@ -1,0 +1,140 @@
+/* ─── Design Tokens ──────────────────────────────────────────────────────── */
+:root {
+  --ground:         #EDF4F1;
+  --surface:        #FFFFFF;
+  --surface-2:      #F4FAF7;
+  --border:         #D3E6E0;
+  --border-strong:  #A5C4BC;
+
+  --accent:         #007A6E;
+  --accent-hover:   #005C52;
+  --accent-light:   #DEF0EC;
+
+  --text:           #1C2B27;
+  --text-muted:     #4D6960;
+  --text-light:     #8AADA5;
+
+  --danger:         #DC2626;
+  --danger-hover:   #B91C1C;
+  --danger-light:   #FEE2E2;
+
+  --success:        #16A34A;
+  --success-light:  #DCFCE7;
+  --warning:        #D97706;
+  --warning-light:  #FEF3C7;
+  --info:           #2563EB;
+  --info-light:     #DBEAFE;
+
+  --r-sm:   4px;
+  --r:      8px;
+  --r-lg:   12px;
+  --r-xl:   16px;
+  --r-full: 9999px;
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.06);
+  --shadow:    0 4px 14px rgba(0,0,0,.08);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,.14);
+
+  --t:          150ms ease;
+  --font-mono:  ui-monospace, 'Cascadia Code', Consolas, monospace;
+  --navbar-h:   58px;
+}
+
+/* ─── Reset ──────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { -webkit-font-smoothing: antialiased; }
+
+body {
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text);
+  background: var(--ground);
+  min-height: 100vh;
+}
+
+a { color: inherit; text-decoration: none; }
+button { cursor: pointer; font: inherit; border: none; background: none; }
+input, textarea, select { font: inherit; }
+
+/* ─── App layout ─────────────────────────────────────────────────────────── */
+.page-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.page-main {
+  flex: 1;
+  max-width: 920px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 36px 24px 80px;
+}
+
+/* ─── Auth ───────────────────────────────────────────────────────────────── */
+.auth-layout {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.auth-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 44px 40px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: var(--shadow);
+}
+
+.auth-brand   { margin-bottom: 32px; }
+.auth-title   { font-size: 22px; font-weight: 700; letter-spacing: -.3px; margin-bottom: 4px; }
+.auth-sub     { font-size: 14px; color: var(--text-muted); margin-bottom: 28px; }
+.auth-footer  { margin-top: 22px; text-align: center; font-size: 13px; color: var(--text-muted); }
+.auth-footer a { color: var(--accent); font-weight: 500; }
+.auth-footer a:hover { text-decoration: underline; }
+
+/* ─── Brand ──────────────────────────────────────────────────────────────── */
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  text-decoration: none;
+}
+
+.brand-mark {
+  width: 32px;
+  height: 32px;
+  background: var(--accent);
+  color: #fff;
+  border-radius: var(--r-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: -.5px;
+  font-family: var(--font-mono);
+  flex-shrink: 0;
+}
+
+.brand-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -.3px;
+}
+
+.brand-tag {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--accent-light);
+  padding: 2px 7px;
+  border-radius: var(--r-full);
+}
