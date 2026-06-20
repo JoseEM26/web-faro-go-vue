@@ -1,206 +1,133 @@
-# Faro
+# 🔦 Faro
 
-> Gestión de tareas full-stack — Go + Vue 3 + Docker
+![Go](https://img.shields.io/badge/Go-1.22-00ADD8?style=flat-square&logo=go&logoColor=white)
+![Vue](https://img.shields.io/badge/Vue-3.4-42B883?style=flat-square&logo=vuedotjs&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?style=flat-square&logo=postgresql&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat-square&logo=docker&logoColor=white)
+![JWT](https://img.shields.io/badge/Auth-JWT-black?style=flat-square&logo=jsonwebtokens)
 
-Backend con arquitectura en capas, JWT, GORM y PostgreSQL. Frontend en Vue 3 con componentes reutilizables y Pinia. Todo el stack levanta con un solo comando.
-
----
-
-## Stack
-
-| Capa | Tecnología |
-|---|---|
-| Backend | Go 1.22, chi v5, GORM v1.25, JWT HS256, bcrypt |
-| Base de datos | PostgreSQL 16 |
-| Frontend | Vue 3.4, Vite 5, Pinia, Axios, vue-router |
-| Infraestructura | Docker Compose v2, Nginx |
+Gestión de tareas full-stack. Backend Go con arquitectura en capas, JWT y GORM. Frontend Vue 3 con componentes reutilizables. Levanta con un comando.
 
 ---
 
-## Inicio rápido
+## 🚀 Inicio rápido
 
 ```bash
-# 1. Verificar que los puertos estén disponibles (requiere PowerShell)
-.\check-ports.ps1
-
-# 2. Levantar todo el stack
 docker-compose up --build
-
-# 3. Abrir la app
-#    Frontend  → http://localhost:3000
-#    API REST  → http://localhost:8080/api/v1
-#    PostgreSQL → localhost:5433
 ```
 
-La primera vez tarda ~2 min mientras descarga imágenes y compila. El seed inserta usuarios y categorías automáticamente al arrancar.
-
-> Para forzar rebuild con cambios de código:
-> ```bash
-> docker-compose down && docker-compose build --no-cache && docker-compose up -d
-> ```
-
----
-
-## Usuarios seed
-
-Al arrancar por primera vez se crean automáticamente:
-
-| Email | Contraseña |
+| Servicio | URL |
 |---|---|
-| admin@faro.app | `123456789` |
-| juan.perez@faro.app | `123456789` |
-| maria.garcia@faro.app | `123456789` |
-| carlos.lopez@faro.app | `123456789` |
-| ana.martinez@faro.app | `123456789` |
+| 🌐 Frontend | http://localhost:3000 |
+| ⚙️ API | http://localhost:8080/api/v1 |
+| 🗄️ PostgreSQL | localhost:**5433** |
 
-También se crean 5 categorías seed: Trabajo, Personal, Urgente, Aprendizaje, Ideas.
+> Rebuild con cambios: `docker-compose down && docker-compose build --no-cache && docker-compose up -d`
 
 ---
 
-## API REST
+## 👥 Usuarios seed
+
+Se crean automáticamente al primer arranque. Contraseña de todos: **`123456789`**
+
+| | Email |
+|---|---|
+| 🟢 | admin@faro.app |
+| 🔵 | juan.perez@faro.app |
+| 🟣 | maria.garcia@faro.app |
+| 🔴 | carlos.lopez@faro.app |
+| 🟡 | ana.martinez@faro.app |
+
+Categorías seed: `Trabajo` `Personal` `Urgente` `Aprendizaje` `Ideas`
+
+---
+
+## 📡 API
 
 Base URL: `http://localhost:8080/api/v1`
 
-### Auth (público)
+### 🔓 Auth — público
 
-| Método | Ruta | Descripción |
+| Método | Ruta | |
 |---|---|---|
-| `POST` | `/auth/register` | Crear cuenta — devuelve JWT |
-| `POST` | `/auth/login` | Iniciar sesión — devuelve JWT |
+| `POST` | `/auth/register` | Crear cuenta · devuelve JWT |
+| `POST` | `/auth/login` | Iniciar sesión · devuelve JWT |
 
-### Tasks (JWT requerido)
+### ✅ Tasks — `JWT`
 
-| Método | Ruta | Descripción |
+| Método | Ruta | |
 |---|---|---|
-| `GET` | `/tasks` | Listar tareas |
-| `POST` | `/tasks` | Crear tarea |
-| `GET` | `/tasks/{id}` | Obtener por ID |
-| `PUT` | `/tasks/{id}` | Actualizar (incluye toggle `completed`) |
+| `GET` | `/tasks` | Listar |
+| `POST` | `/tasks` | Crear |
+| `GET` | `/tasks/{id}` | Obtener |
+| `PUT` | `/tasks/{id}` | Actualizar / completar |
 | `DELETE` | `/tasks/{id}` | Eliminar |
 
-### Notes (JWT — privadas por usuario)
+### 📝 Notes — `JWT` · privadas por usuario
 
-| Método | Ruta | Descripción |
+| Método | Ruta | |
 |---|---|---|
-| `GET` | `/notes` | Notas del usuario autenticado |
-| `POST` | `/notes` | Crear nota |
-| `GET` | `/notes/{id}` | Obtener (solo si pertenece al usuario) |
+| `GET` | `/notes` | Mis notas |
+| `POST` | `/notes` | Crear |
+| `GET` | `/notes/{id}` | Obtener |
 | `PUT` | `/notes/{id}` | Actualizar |
 | `DELETE` | `/notes/{id}` | Eliminar |
 
-### Categories (JWT requerido)
+### 🏷️ Categories — `JWT`
 
-| Método | Ruta | Descripción |
+| Método | Ruta | |
 |---|---|---|
-| `GET` | `/categories` | Listar categorías |
-| `POST` | `/categories` | Crear — `name` + `color` hex |
-| `PUT` | `/categories/{id}` | Actualizar nombre o color |
+| `GET` | `/categories` | Listar |
+| `POST` | `/categories` | Crear · `name` + `color` hex |
+| `PUT` | `/categories/{id}` | Actualizar |
 | `DELETE` | `/categories/{id}` | Eliminar |
 
 ---
 
-## Ejemplos con curl
+## 🏗️ Arquitectura
 
-```bash
-# Login
-curl -X POST http://localhost:8080/api/v1/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email":"admin@faro.app","password":"123456789"}'
-
-# Crear tarea (con token)
-curl -X POST http://localhost:8080/api/v1/tasks \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer <TOKEN>" \
-  -d '{"title":"Estudiar Go","description":"Terminar el tour de Go"}'
-
-# Crear nota privada
-curl -X POST http://localhost:8080/api/v1/notes \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer <TOKEN>" \
-  -d '{"title":"Ideas","content":"Agregar paginación a la API"}'
-
-# Crear categoría con color
-curl -X POST http://localhost:8080/api/v1/categories \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer <TOKEN>" \
-  -d '{"name":"Urgente","color":"#EF4444"}'
+```
+Request → Router → Auth Middleware → Handler → Service → Repository → PostgreSQL
 ```
 
----
+| Capa | Responsabilidad |
+|---|---|
+| **Handler** | Parsea request, escribe respuesta JSON |
+| **Service** | Validaciones de negocio |
+| **Repository** | Queries GORM — interfaz desacoplada |
+| **Middleware** | Valida JWT, inyecta `userID` en contexto |
 
-## Estructura del proyecto
+<details>
+<summary>📁 Estructura de carpetas</summary>
 
 ```
 proyecto-go/
 ├── backend/
-│   ├── cmd/api/main.go              # Wiring: repos → services → handlers
+│   ├── cmd/api/main.go          # Wiring principal
 │   ├── internal/
-│   │   ├── config/                  # Variables de entorno y DSN
-│   │   ├── domain/                  # Task · Note · User · Category + DTOs
-│   │   ├── handler/                 # Controladores HTTP (chi)
-│   │   ├── middleware/              # Auth JWT · CORS · Logger
-│   │   ├── repository/              # Interfaces + implementaciones GORM
-│   │   ├── seed/                    # Datos iniciales al primer arranque
-│   │   └── service/                 # Lógica de negocio + validaciones
-│   ├── pkg/
-│   │   ├── database/                # Conexión GORM + pool
-│   │   ├── response/                # Helpers JSON
-│   │   └── token/                   # Generación y validación JWT
-│   └── Dockerfile                   # Multi-stage: golang:1.22 → scratch
+│   │   ├── domain/              # Task · Note · User · Category
+│   │   ├── handler/             # HTTP controllers
+│   │   ├── middleware/          # JWT · CORS · Logger
+│   │   ├── repository/          # GORM implementations
+│   │   ├── seed/                # Datos iniciales
+│   │   └── service/             # Lógica de negocio
+│   └── Dockerfile               # Multi-stage → scratch
 │
 ├── frontend/
 │   ├── src/
-│   │   ├── api/                     # Axios: tasks · notes · categories · auth
-│   │   ├── components/
-│   │   │   ├── common/              # BaseButton · BaseInput · BaseModal · ...
-│   │   │   └── layout/              # AppNavbar
-│   │   ├── stores/                  # Pinia: auth store con localStorage
-│   │   └── views/                   # Tasks · Notes · Categories · Login · Register
-│   ├── nginx.conf                   # SPA routing + proxy /api/ → backend
-│   └── Dockerfile                   # node:20 build → nginx:alpine
+│   │   ├── components/common/   # BaseButton · BaseModal · ...
+│   │   ├── stores/              # Pinia auth
+│   │   └── views/               # Tasks · Notes · Categories · Auth
+│   └── Dockerfile               # node:20 → nginx:alpine
 │
-├── docker-compose.yml               # 3 servicios · red interna · puerto 5433
-└── check-ports.ps1                  # Valida :5433 · :8080 · :3000
+├── docker-compose.yml
+└── check-ports.ps1              # Valida puertos antes de levantar
 ```
+
+</details>
 
 ---
 
-## Arquitectura del backend
+## 🧩 Componentes UI
 
-```
-Request → chi Router → Middleware (Auth JWT) → Handler → Service → Repository → GORM → PostgreSQL
-```
-
-- **Handler**: parsea request, llama al servicio, escribe respuesta JSON
-- **Service**: validaciones de negocio, orquesta el repositorio
-- **Repository**: interfaz + implementación GORM — facilita testing
-- **Middleware Auth**: valida JWT, inyecta `userID` en el contexto
-
-Las notas son privadas por usuario: el repositorio filtra por `user_id` en todas las queries.
-
----
-
-## Componentes Vue reutilizables
-
-| Componente | Descripción |
-|---|---|
-| `BaseButton` | Variantes: primary, secondary, ghost, danger · Tamaños: sm, md, lg · Loading spinner |
-| `BaseInput` | Label + error + hint + v-model |
-| `BaseTextarea` | Igual que BaseInput para áreas de texto |
-| `BaseAlert` | Tipos: error, success, warning |
-| `BaseModal` | Teleport + Transition + cierre con Escape · Scroll lock |
-| `BaseBadge` | Color hex dinámico |
-| `EmptyState` | Estado vacío con icono, título y slot de acción |
-| `PageHeader` | Título + subtítulo + slot de acciones |
-
----
-
-## Puertos
-
-| Servicio | Interno (Docker) | Externo (host) |
-|---|---|---|
-| PostgreSQL | 5432 | **5433** |
-| Backend Go | 8080 | 8080 |
-| Frontend Nginx | 80 | 3000 |
-
-El puerto 5433 evita conflictos con instalaciones locales de PostgreSQL.
+`BaseButton` · `BaseInput` · `BaseTextarea` · `BaseAlert` · `BaseModal` · `BaseBadge` · `EmptyState` · `PageHeader`
